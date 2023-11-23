@@ -1,5 +1,5 @@
 from flask import Blueprint,jsonify,request
-from app.models import JobSeeker,Skillset,db
+from app.models import JobSeeker,db
 from flask_bcrypt import Bcrypt
 import jwt
 from datetime import datetime
@@ -21,22 +21,15 @@ def jobseeker_signup():
     
     new_jobseeker=JobSeeker(username= data["username"],
             email= data["email"],
-            password= hashed,  # You should hash the password before storing it
+            password= hashed,
             experience= data["experience"],
             bio= data["bio"],
+            skills=data["skills"],
             status= data["status"],
             availability= data["availability"],
             address= data["address"],
             created_at= datetime.now()
             )
-
-    skillsets=[]
-    for skill in data['skillsets']:
-        skillset=Skillset(skills=skill)
-        skillsets.append(skillset)
-        db.session.add(skillset)
-        
-    new_jobseeker.skillsets=skillsets
     
     db.session.add(new_jobseeker)
     db.session.commit()
@@ -55,29 +48,27 @@ def jobseeker_login():
         token=jwt.encode({'email':jobseeker.email,'role':"jobseeker","id":jobseeker.id},"secret_key",algorithm='HS256')
         return jsonify({'msg':"Logged in Successfully",'token':token})
     else:
-        return jsonify({"msg":"Wrong Credentials. Please try again "})
+        return jsonify({"msg":"Wrong Credentials. Please try again"})
 
 
 @Jobseeker_bp.route('/profile/<int:jobseeker_id>', methods=['GET'])
 def get_jobseeker_profile(jobseeker_id):
     jobseeker = JobSeeker.query.get_or_404(jobseeker_id)
 
-    # Access the skills of the job seeker
-    skills = [skill.skills for skill in jobseeker.skillsets]
-
     # You can include other profile information as needed
     profile_data = {
+        'id':jobseeker.id,
         'username': jobseeker.username,
         'email': jobseeker.email,
         'experience': jobseeker.experience,
         'bio': jobseeker.bio,
+        'skills':jobseeker.skills,
         'status': jobseeker.status,
         'availability': jobseeker.availability,
         'address': jobseeker.address,
-        'skills': skills
     }
 
-    return jsonify({"msg": "User Details", "data": profile_data})
+    return jsonify({"msg": "User Details", "data": profile_data}),200
 
 
 @Jobseeker_bp.route('/update/<int:jobseeker_id>', methods=['PUT','PATCH'])
@@ -88,20 +79,35 @@ def update_jobseeker(jobseeker_id):
         return jsonify({'message': 'Job Seeker not found'}), 404
 
     data = request.get_json()
+    
+    token=request.headers.get("Authorization")
+    decode=jwt.decode(token,'secret_key',algorithms=['HS256'])
+    role=decode.get('role')
+    id=decode.get('id')
+    
+    if jobseeker_id!=id and role!="jobseeker":
+        return jsonify({'msg':"Not Authorized to make changes"})
+    else:
+        for key, value in data.items():
+            # Use setattr to dynamically set attributes based on the request data
+            setattr(jobseeker, key, value)
+        db.session.commit()
+        return jsonify({'message': 'Job Seeker updated successfully'})
 
-    for key, value in data.items():
-        # Use setattr to dynamically set attributes based on the request data
-        setattr(jobseeker, key, value)
 
-    db.session.commit()
-
-    return jsonify({'message': 'Job Seeker updated successfully'})
-
-
-@Jobseeker_bp.route('delete/<int:jobseeker_id>', methods=['DELETE'])
+@Jobseeker_bp.route('/delete/<int:jobseeker_id>', methods=['DELETE'])
 def delete_jobseeker(jobseeker_id):
     jobseeker = JobSeeker.query.get_or_404(jobseeker_id)
-    db.session.delete(jobseeker)
-    db.session.commit()
+    
+    token=request.headers.get("Authorization")
+    decode=jwt.decode(token,'secret_key',algorithms=['HS256'])
+    role=decode.get('role')
+    id=decode.get('id')
+    
+    if jobseeker_id!=id and role!="jobseeker":
+        return jsonify({'msg':"Not Authorized to make changes"})
+    else:
+        db.session.delete(jobseeker)
+        db.session.commit()
 
-    return jsonify(message='Job Seeker deleted successfully')
+        return jsonify(message='Job Seeker deleted successfully')
