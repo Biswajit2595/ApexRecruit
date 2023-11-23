@@ -157,7 +157,6 @@ def get_single_application(application_id):
             'email': application.job_seeker_rel.email,
             'skills': application.job_seeker_rel.skills,
             'experience': application.job_seeker_rel.experience,
-            # Add any other relevant details
         }
 
         application_data = {
