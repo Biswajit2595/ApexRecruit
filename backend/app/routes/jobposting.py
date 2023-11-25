@@ -53,6 +53,57 @@ def jobpost_create():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
+@Jobposting_bp.route("/created", methods=['GET'])
+def get_jobs_created_by_hiring_manager():
+    try:
+        token = request.headers.get("Authorization")
+        decode = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+        hiring_manager_id = decode.get('id')
+        role = decode.get('role')
+
+        # Check if the user is a hiring manager
+        if role != 'hiring_manager':
+            return jsonify({'message': 'Unauthorized. Only hiring managers can view their created jobs'}), 401
+
+        # Get all job postings created by the hiring manager
+        job_postings = Jobposting.query.filter_by(hiring_manager_id=hiring_manager_id).all()
+
+        job_postings_data = []
+        for job_posting in job_postings:
+            job_posting_data = {
+                'id': job_posting.id,
+                'title': job_posting.title,
+                'description': job_posting.description,
+                'location': job_posting.location,
+                'role': job_posting.role,
+                'company_name': job_posting.company_name,
+                'department': job_posting.department,
+                'employment_type': job_posting.employment_type,
+                'education': job_posting.education,
+                'industry': job_posting.industry,
+                'skills': job_posting.skills,
+                'salary': job_posting.salary,
+                'experience': job_posting.experience,
+                'status': job_posting.status,
+                'start_date': job_posting.start_date,
+                'end_date': job_posting.end_date,
+                'created_at': job_posting.created_at,
+                # Add any other relevant details
+            }
+
+            job_postings_data.append(job_posting_data)
+
+        return jsonify({'job_postings': job_postings_data}), 200
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({'message': 'Token has expired. Please log in again.'}), 401
+
+    except jwt.InvalidTokenError:
+        return jsonify({'message': 'Invalid token. Please log in again.'}), 401
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @Jobposting_bp.route("/get/<int:id>", methods=['GET'])
 def get_single_job_posting(id):
     try:
@@ -116,7 +167,6 @@ def get_all_job_postings():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 
 @Jobposting_bp.route("/update/<int:id>", methods=['PUT', 'PATCH'])

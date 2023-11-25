@@ -66,6 +66,7 @@ def get_jobseeker_profile(jobseeker_id):
         'status': jobseeker.status,
         'availability': jobseeker.availability,
         'address': jobseeker.address,
+        'role':"job seeker"
     }
 
     return jsonify({"msg": "User Details", "data": profile_data}),200

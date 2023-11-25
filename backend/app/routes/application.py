@@ -2,7 +2,16 @@ from flask import Flask, Blueprint, jsonify, request
 from app.models import Application, Jobposting, Skillset, Hiringmanager,JobSeeker, db
 import jwt
 from datetime import datetime
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
 
+# Load environment variables from the .env file
+load_dotenv()
+
+client=OpenAI(
+    api_key=os.environ.get('OPENAI_API_KEY')
+)
 Application_bp = Blueprint("Application", __name__, url_prefix="/applications")
 
 @Application_bp.route("/apply/<int:job_posting_id>", methods=['POST'])
@@ -208,4 +217,75 @@ def delete_application(application_id):
 
     except Exception as e:
         db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+@Application_bp.route("/recommendations/<int:job_posting_id>", methods=['POST'])
+def recommend_applicants(job_posting_id):
+    try:
+        data = request.get_json()
+        # Fetch job posting details
+        job_posting = Jobposting.query.get_or_404(job_posting_id)
+        job_posting_data = {
+            'title': job_posting.title,
+            'description': job_posting.description,
+            'skills': job_posting.skills,
+            'experience': job_posting.experience,
+            # Add any other relevant details
+        }
+
+        # Fetch applicant details
+        applications = Application.query.filter_by(job_posting_id=job_posting_id).all()
+        applicants_data = []
+        for application in applications:
+            job_seeker_data = {
+                'name': application.job_seeker_rel.username,
+                'email': application.job_seeker_rel.email,
+                'skills': application.job_seeker_rel.skills,
+                'experience': application.job_seeker_rel.experience,
+                # Add any other relevant details
+            }
+            applicants_data.append(job_seeker_data)
+
+        # print(job_posting_data)
+        # print(applicants_data)
+        # Prepare messages for GPT-3
+        messages = [
+            {
+                "role": "system",
+                # "content":"you are an helpful assistant"
+                "content": "You are a helpful assistant. Your task is to help the hiring manager recommend applicants based on the job's required skills, experience, and skills of the applicants, and their experience."
+            },
+            {
+                "role": "user",
+                # "content":"Hello"
+                "content": f"Job Posting Details: {job_posting_data} and details the applicants: {applicants_data}"
+            },
+            {
+                "role": "assistant",
+                "content": f"Applicant Details: {applicants_data}"
+            }
+        ]
+
+        # Call OpenAI API for recommendations
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=messages,
+            temperature=1,
+            max_tokens=256,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+
+        # Extract the generated response from the OpenAI API
+        chatgpt_response = response.choices[0].message.content  # Use dictionary notation here
+        return jsonify({'recommendations': chatgpt_response})
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({'message': 'Token has expired. Please log in again.'}), 401
+
+    except jwt.InvalidTokenError:
+        return jsonify({'message': 'Invalid token. Please log in again.'}), 401
+
+    except Exception as e:
         return jsonify({'error': str(e)}), 500

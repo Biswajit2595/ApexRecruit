@@ -44,7 +44,7 @@ def login():
 
         if manager and bcrypt.check_password_hash(manager.password, password):
             token = jwt.encode({'email': manager.email, 'role': "hiring_manager", "id": manager.id},"secret_key", algorithm='HS256')
-            return jsonify({'msg': "Logged in Successfully", 'token': token, 'manager_id': manager.id})
+            return jsonify({'msg': "Logged in Successfully",'role':"hiring manager", 'token': token, 'manager_id': manager.id})
         else:
             return jsonify({"msg": "Wrong Credentials. Please try again"}), 401
     except Exception as e:
