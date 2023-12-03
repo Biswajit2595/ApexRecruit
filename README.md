@@ -11,8 +11,8 @@ Welcome to Apex Recruit, your go-to job portal for discovering exciting career o
 - [Links](#links)
 - [Installation](#installation--getting-started)
 - [Features](#features)
-- [Tech Stack](#tech-stack)
 - [API Endpoints](#api-endpoints)
+- [Tech Stack](#tech-stack)
 - [Screenshots](#screenshots)
 
 ## Links
@@ -81,3 +81,18 @@ Welcome to Apex Recruit, your go-to job portal for discovering exciting career o
 - **Flask:** Handle server-side logic seamlessly.
 
 ## Screenshots
+
+## Home Page
+![Screenshot 2023-12-04 005854](https://github.com/Biswajit2595/ApexRecruit/assets/115461295/d8b070f7-ea5b-45b9-b306-8f1b1f4cb0cd)
+
+## Applications Page
+![applicstion](https://github.com/Biswajit2595/ApexRecruit/assets/115461295/99039e56-40f0-47a5-bd9d-60b787e21797)
+
+## Login Page
+![Screenshot 2023-12-04 010015](https://github.com/Biswajit2595/ApexRecruit/assets/115461295/2e9b1579-d837-4ce2-b7d7-80ef54a66a8e)
+
+## SignIn Page
+![Screenshot 2023-12-04 010044](https://github.com/Biswajit2595/ApexRecruit/assets/115461295/dae4d74d-e989-4639-bc11-7a7f73563905)
+
+## Profile And Job Post Creation
+![Screenshot 2023-12-04 010323](https://github.com/Biswajit2595/ApexRecruit/assets/115461295/d4bdf360-942b-4113-b90b-6221ec20fb47)
