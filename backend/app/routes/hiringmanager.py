@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from app.models import Hiringmanager, db
 from flask_bcrypt import Bcrypt
 import jwt
+import os
 
 hiring_manager_bp = Blueprint('hiring_manager', __name__, url_prefix="/hiringmanager")
 bcrypt = Bcrypt()
@@ -43,8 +44,8 @@ def login():
         manager = Hiringmanager.query.filter_by(email=email).first()
 
         if manager and bcrypt.check_password_hash(manager.password, password):
-            token = jwt.encode({'email': manager.email, 'role': "hiring_manager", "id": manager.id},"secret_key", algorithm='HS256')
-            return jsonify({'msg': "Logged in Successfully",'role':"hiring manager", 'token': token, 'manager_id': manager.id})
+            token = jwt.encode({'email': manager.email, 'role': "hiring_manager", "id": manager.id},os.environ.get("SECRET_KEY"), algorithm='HS256')
+            return jsonify({'msg': "Logged in Successfully",'role':"Hiring Manager", 'token': token, 'id': manager.id})
         else:
             return jsonify({"msg": "Wrong Credentials. Please try again"}), 401
     except Exception as e:
@@ -77,7 +78,7 @@ def update_jobseeker(id):
 
         data = request.get_json()
         token = request.headers.get("Authorization")
-        decode = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+        decode = jwt.decode(token, os.environ.get("SECRET_KEY"), algorithms=['HS256'])
         role = decode.get('role')
         manager_id = decode.get('id')
 
@@ -98,7 +99,7 @@ def delete_jobseeker(id):
     try:
         manager = Hiringmanager.query.get_or_404(id)
         token = request.headers.get("Authorization")
-        decode = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+        decode = jwt.decode(token, os.environ.get("SECRET_KEY"), algorithms=['HS256'])
         role = decode.get('role')
         manager_id = decode.get('id')
 

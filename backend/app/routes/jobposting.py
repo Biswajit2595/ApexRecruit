@@ -2,6 +2,7 @@ from flask import Flask, Blueprint, jsonify, request
 from app.models import Jobposting, Skillset, Hiringmanager, db
 import jwt
 from datetime import datetime
+import os
 
 Jobposting_bp = Blueprint("Jobposting", __name__, url_prefix="/jobs")
 
@@ -10,7 +11,7 @@ def jobpost_create():
     try:
         data = request.get_json()
         token = request.headers.get("Authorization")
-        decode = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+        decode = jwt.decode(token, os.environ.get("SECRET_KEY"), algorithms=['HS256'])
         hiring_manager_id = decode.get('id')
 
         # Check if the hiring manager exists
@@ -57,15 +58,13 @@ def jobpost_create():
 def get_jobs_created_by_hiring_manager():
     try:
         token = request.headers.get("Authorization")
-        decode = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+        decode = jwt.decode(token, os.environ.get("SECRET_KEY"), algorithms=['HS256'])
         hiring_manager_id = decode.get('id')
         role = decode.get('role')
 
-        # Check if the user is a hiring manager
         if role != 'hiring_manager':
             return jsonify({'message': 'Unauthorized. Only hiring managers can view their created jobs'}), 401
 
-        # Get all job postings created by the hiring manager
         job_postings = Jobposting.query.filter_by(hiring_manager_id=hiring_manager_id).all()
 
         job_postings_data = []
@@ -88,7 +87,6 @@ def get_jobs_created_by_hiring_manager():
                 'start_date': job_posting.start_date,
                 'end_date': job_posting.end_date,
                 'created_at': job_posting.created_at,
-                # Add any other relevant details
             }
 
             job_postings_data.append(job_posting_data)
@@ -175,7 +173,7 @@ def update_job_posting(id):
         job_posting = Jobposting.query.get_or_404(id)
         data = request.get_json()
         token = request.headers.get("Authorization")
-        decode = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+        decode = jwt.decode(token, os.environ.get("SECRET_KEY"), algorithms=['HS256'])
         hiring_manager_id = decode.get('id')
         role = decode.get('role')
 
@@ -229,9 +227,9 @@ def update_job_posting(id):
 def delete_job_posting(id):
     try:
         job_posting = Jobposting.query.get_or_404(id)
-        data = request.get_json()
+        # data = request.get_json()
         token = request.headers.get("Authorization")
-        decode = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+        decode = jwt.decode(token, os.environ.get("SECRET_KEY"), algorithms=['HS256'])
         hiring_manager_id = decode.get('id')
         role = decode.get('role')
 

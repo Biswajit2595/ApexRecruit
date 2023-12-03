@@ -3,6 +3,7 @@ from app.models import JobSeeker,db
 from flask_bcrypt import Bcrypt
 import jwt
 from datetime import datetime
+import os
 
 Jobseeker_bp=Blueprint('jobseeker',__name__,url_prefix='/jobseekers')
 bcrypt=Bcrypt()
@@ -45,8 +46,8 @@ def jobseeker_login():
     jobseeker=JobSeeker.query.filter_by(email=email).first()
     
     if jobseeker.email==email and bcrypt.check_password_hash(jobseeker.password,password):
-        token=jwt.encode({'email':jobseeker.email,'role':"jobseeker","id":jobseeker.id},"secret_key",algorithm='HS256')
-        return jsonify({'msg':"Logged in Successfully",'token':token})
+        token=jwt.encode({'email':jobseeker.email,'role':"jobseeker","id":jobseeker.id},os.environ.get("SECRET_KEY"),algorithm='HS256')
+        return jsonify({'msg':"Logged in Successfully",'token':token,'role':"Job Seeker","id":jobseeker.id})
     else:
         return jsonify({"msg":"Wrong Credentials. Please try again"})
 
@@ -82,7 +83,7 @@ def update_jobseeker(jobseeker_id):
     data = request.get_json()
     
     token=request.headers.get("Authorization")
-    decode=jwt.decode(token,'secret_key',algorithms=['HS256'])
+    decode=jwt.decode(token,os.environ.get("SECRET_KEY"),algorithms=['HS256'])
     role=decode.get('role')
     id=decode.get('id')
     
@@ -101,7 +102,7 @@ def delete_jobseeker(jobseeker_id):
     jobseeker = JobSeeker.query.get_or_404(jobseeker_id)
     
     token=request.headers.get("Authorization")
-    decode=jwt.decode(token,'secret_key',algorithms=['HS256'])
+    decode=jwt.decode(token,os.environ.get("SECRET_KEY"),algorithms=['HS256'])
     role=decode.get('role')
     id=decode.get('id')
     
@@ -112,3 +113,4 @@ def delete_jobseeker(jobseeker_id):
         db.session.commit()
 
         return jsonify(message='Job Seeker deleted successfully')
+
