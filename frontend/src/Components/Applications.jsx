@@ -1,8 +1,8 @@
-
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getApplicants, updateApplicationStatus } from '../Redux/PostReducer/action';
-import { Box, Text, Heading, List, ListItem, Avatar, Button, Select } from '@chakra-ui/react';
+import { Box, Text, Heading, List, ListItem, Avatar, Button, Select,Image } from '@chakra-ui/react';
+import nodata from '../images/no-data.png'
 
 const Applications = ({ id }) => {
   const { applicants, token } = useSelector((store) => ({
@@ -25,7 +25,10 @@ const Applications = ({ id }) => {
   return (
     <Box>
       {applicants.length === 0 ? (
+        <>
         <Text>No applications have been submitted for this job posting.</Text>
+        <Image src={nodata} />
+        </>
       ) : (
         applicants.map((application) => (
           <Box key={application.application_id} p={4} borderWidth="1px" borderRadius="lg" mb={4}>

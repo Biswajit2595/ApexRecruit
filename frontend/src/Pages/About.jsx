@@ -1,4 +1,6 @@
 import { Box, Heading, Text, Image, Center } from "@chakra-ui/react";
+import logo from '../images/Designer.png'
+
 
 const About = () => {
   return (
@@ -15,7 +17,7 @@ const About = () => {
           </Text>
 
           <Image
-            src="/path/to/your/image.jpg"
+            src={logo}
             alt="About Apex Recruit"
             mb={6}
             borderRadius="md"

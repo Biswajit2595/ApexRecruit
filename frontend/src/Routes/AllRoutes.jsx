@@ -11,6 +11,7 @@ import SinglePostedJobs from '../Pages/SinglePostedJobs'
 import Applied from '../Pages/Applied'
 import SingleApplication from '../Pages/SingleApplication'
 import PrivateRoute from '../Components/PrivateRoute'
+import PageNotFound from '../Pages/PageNotFound'
 
 const AllRoutes = () => {
   return (
@@ -54,7 +55,7 @@ const AllRoutes = () => {
         </PrivateRoute>
         } />
         <Route path='/about' element={ <About/> } />
-        <Route path="*" element={ <h3>404 Page Not Found</h3> } />
+        <Route path="*" element={ <PageNotFound/> } />
     </Routes>
   )
 }

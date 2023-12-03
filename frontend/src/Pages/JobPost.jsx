@@ -203,9 +203,9 @@ const JobPost = () => {
                 onChange={handleChange}
                 isRequired
               >
-                <option value="open">Open</option>
-                <option value="in progress">In Progress</option>
-                <option value="filled">Filled</option>
+                <option value="Open">Open</option>
+                <option value="In progress">In Progress</option>
+                <option value="Filled">Filled</option>
               </Select>
 
               <FormLabel>Start Date</FormLabel>

@@ -199,7 +199,7 @@ const Signup = () => {
                   name="password"
                   value={jobSeeker.password}
                   onChange={handleJobSeekerChange}
-                  placeholder="Enter your phone number"
+                  placeholder="Enter your password"
                 />
                 <FormLabel>Address</FormLabel>
                 <Input
@@ -207,7 +207,7 @@ const Signup = () => {
                   name="address"
                   value={jobSeeker.address}
                   onChange={handleJobSeekerChange}
-                  placeholder="Enter your phone number"
+                  placeholder="Enter your Address"
                 />
                 <FormLabel>Work Experience</FormLabel>
                 <Select
@@ -216,9 +216,9 @@ const Signup = () => {
                   value={jobSeeker.experience}
                   onChange={handleJobSeekerChange}
                 >
-                  <option value="entry level">Entry Level</option>
-                  <option value="mid level">Mid Level</option>
-                  <option value="senior">Senior</option>
+                  <option value="Entry level">Entry Level</option>
+                  <option value="Mid level">Mid Level</option>
+                  <option value="Senior">Senior</option>
                 </Select>
                 <FormLabel>Bio</FormLabel>
                 <Textarea
@@ -233,7 +233,7 @@ const Signup = () => {
                   name="skills"
                   value={jobSeeker.skills}
                   onChange={handleJobSeekerChange}
-                  placeholder="Enter your skills separated by comma"
+                  placeholder="Enter your skills separated by comma eg:Html,Js,Css"
                 />
                 <FormLabel>Status</FormLabel>
                 <Select
