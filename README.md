@@ -20,54 +20,58 @@ Welcome to Apex Recruit, your go-to job portal for discovering exciting career o
 - **Website URL:** [Apex Recruit](https://apexrecruit.netlify.app/)
 - **Backend Deployed URL:** [Apex Recruit API](https://apexrecruit-api-flask-app.onrender.com)
 
-### **Installation & Getting Started**
+# Installation & Getting Started
 
-#### Backend
+## Backend
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Biswajit2595/ApexRecruit.git
-Navigate to the backend folder:
+    ```bash
+    git clone https://github.com/Biswajit2595/ApexRecruit.git
+    ```
 
-bash
-Copy code
-cd ApexRecruit/backend
-Set up a virtual environment:
+2. **Navigate to the backend folder:**
+    ```bash
+    cd ApexRecruit/backend
+    ```
 
-bash
-Copy code
-python -m venv venv
-Activate the virtual environment:
+3. **Set up a virtual environment:**
+    ```bash
+    python -m venv venv
+    ```
 
-On Windows: venv\Scripts\activate
-On macOS/Linux: source venv/bin/activate
-Install backend dependencies:
+4. **Activate the virtual environment:**
+    - On Windows: `venv\Scripts\activate`
+    - On macOS/Linux: `source venv/bin/activate`
 
-bash
-Copy code
-pip install -r requirements.txt
-Start the backend server:
+5. **Install backend dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-bash
-Copy code
-flask run
-Frontend
-Navigate to the frontend folder:
+6. **Start the backend server:**
+    ```bash
+    flask run
+    ```
 
-bash
-Copy code
-cd ApexRecruit/frontend
-Install frontend dependencies:
+## Frontend
 
-bash
-Copy code
-npm install
-Start the frontend application:
+1. **Navigate to the frontend folder:**
+    ```bash
+    cd ApexRecruit/frontend
+    ```
 
-bash
-Copy code
-npm start
+2. **Install frontend dependencies:**
+    ```bash
+    npm install
+    ```
+
+3. **Start the frontend application:**
+    ```bash
+    npm start
+    ```
+
 Now, you're ready to explore career opportunities, post jobs, and experience a seamless job-seeking journey with Apex Recruit!
+
 
 ## Features
 
