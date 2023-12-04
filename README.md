@@ -22,13 +22,52 @@ Welcome to Apex Recruit, your go-to job portal for discovering exciting career o
 
 ### **Installation & Getting Started**
 
-1. **Clone the repository:** `https://github.com/Biswajit2595/ApexRecruit.git`
-2. **Set up a virtual environment:** `python -m venv venv`
-3. **Activate the virtual environment:**
-   - On Windows: `venv\Scripts\activate`
-   - On macOS/Linux: `source venv/bin/activate`
-4. **Install dependencies:** `pip install -r requirements.txt`
-5. **Start your job-seeking journey:** `flask run`
+#### Backend
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Biswajit2595/ApexRecruit.git
+Navigate to the backend folder:
+
+bash
+Copy code
+cd ApexRecruit/backend
+Set up a virtual environment:
+
+bash
+Copy code
+python -m venv venv
+Activate the virtual environment:
+
+On Windows: venv\Scripts\activate
+On macOS/Linux: source venv/bin/activate
+Install backend dependencies:
+
+bash
+Copy code
+pip install -r requirements.txt
+Start the backend server:
+
+bash
+Copy code
+flask run
+Frontend
+Navigate to the frontend folder:
+
+bash
+Copy code
+cd ApexRecruit/frontend
+Install frontend dependencies:
+
+bash
+Copy code
+npm install
+Start the frontend application:
+
+bash
+Copy code
+npm start
+Now, you're ready to explore career opportunities, post jobs, and experience a seamless job-seeking journey with Apex Recruit!
 
 ## Features
 
