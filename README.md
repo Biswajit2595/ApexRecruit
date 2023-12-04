@@ -67,7 +67,7 @@ Welcome to Apex Recruit, your go-to job portal for discovering exciting career o
 
 3. **Start the frontend application:**
     ```bash
-    npm start
+    npm run dev
     ```
 
 Now, you're ready to explore career opportunities, post jobs, and experience a seamless job-seeking journey with Apex Recruit!
